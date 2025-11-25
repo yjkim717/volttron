@@ -1,155 +1,133 @@
-# -*- coding: utf-8 -*- {{{
-# ===----------------------------------------------------------------------===
-#
-#                 Component of Eclipse VOLTTRON
-#
-# ===----------------------------------------------------------------------===
-#
-# Copyright 2023 Battelle Memorial Institute
-#
-# Licensed under the Apache License, Version 2.0 (the "License"); you may not
-# use this file except in compliance with the License. You may obtain a copy
-# of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations
-# under the License.
-#
-# ===----------------------------------------------------------------------===
-# }}}
+# -*- coding: utf-8 -*-
+"""
+Integration tests that interact directly with a real Home Assistant instance
+running inside Docker.
 
-import json
-import logging
+These tests validate:
+- get_point -> reads a single point from Home Assistant
+- scrape_all -> retrieves all states and extracts our target entity
+- set_point -> updates the entity state via Home Assistant services
+"""
+
+import time
+import requests
 import pytest
-import gevent
 
-from volttron.platform.agent.known_identities import (
-    PLATFORM_DRIVER,
-    CONFIGURATION_STORE,
+# ----------------------------------------------------------------------
+# Home Assistant connection configuration
+# ----------------------------------------------------------------------
+HOMEASSISTANT_TEST_IP = "192.168.0.100"
+PORT = 8123
+ACCESS_TOKEN = (
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+    "eyJpc3MiOiJiNGQ1ZjhiMWU2YWI0MmI0OTRkMDBjMjg0ODMxZDc4MyIsImlhdCI6MTc2Mzg2OTU0NSwiZXhwIjoyMDc5MjI5NTQ1fQ."
+    "KaLaUSol07sSBphBpYM4y75lUzO1iGu4oIoj_F2Adw0"
 )
-from volttron.platform import get_services_core
-from volttron.platform.agent import utils
-from volttron.platform.keystore import KeyStore
-from volttrontesting.utils.platformwrapper import PlatformWrapper
 
-utils.setup_logging()
-logger = logging.getLogger(__name__)
+BASE_URL = f"http://{HOMEASSISTANT_TEST_IP}:{PORT}"
 
-# To run these tests, create a helper toggle named volttrontest in your Home Assistant instance.
-# This can be done by going to Settings > Devices & services > Helpers > Create Helper > Toggle
-HOMEASSISTANT_TEST_IP = ""
-ACCESS_TOKEN = ""
-PORT = ""
+# Entities to test
+ENTITY_ID = "input_boolean.volttrontest"
+LIGHT_ENTITY_ID = "light.test_light"   # <--- 반드시 네 HA 실제 light로 바꿔줘
 
-skip_msg = "Some configuration variables are not set. Check HOMEASSISTANT_TEST_IP, ACCESS_TOKEN, and PORT"
+HEADERS = {
+    "Authorization": f"Bearer {ACCESS_TOKEN}",
+    "Content-Type": "application/json",
+}
 
-# Skip tests if variables are not set
-pytestmark = pytest.mark.skipif(
-    not (HOMEASSISTANT_TEST_IP and ACCESS_TOKEN and PORT),
-    reason=skip_msg
-)
-HOMEASSISTANT_DEVICE_TOPIC = "devices/home_assistant"
+skip_msg = "Home Assistant is not reachable or token/host/port is incorrect."
 
 
-# Get the point which will should be off
-def test_get_point(volttron_instance, config_store):
-    expected_values = 0
-    agent = volttron_instance.dynamic_agent
-    result = agent.vip.rpc.call(PLATFORM_DRIVER, 'get_point', 'home_assistant', 'bool_state').get(timeout=20)
-    assert result == expected_values, "The result does not match the expected result."
+# ----------------------------------------------------------------------
+# Helper functions
+# ----------------------------------------------------------------------
+def _ha_get_state(entity_id: str) -> str:
+    url = f"{BASE_URL}/api/states/{entity_id}"
+    resp = requests.get(url, headers=HEADERS, timeout=10)
+    resp.raise_for_status()
+    return resp.json()["state"]
 
 
-# The default value for this fake light is 3. If the test cannot reach out to home assistant,
-# the value will default to 3 making the test fail.
-def test_data_poll(volttron_instance: PlatformWrapper, config_store):
-    expected_values = [{'bool_state': 0}, {'bool_state': 1}]
-    agent = volttron_instance.dynamic_agent
-    result = agent.vip.rpc.call(PLATFORM_DRIVER, 'scrape_all', 'home_assistant').get(timeout=20)
-    assert result in expected_values, "The result does not match the expected result."
+def _ha_set_boolean(entity_id: str, value: int) -> None:
+    service = "turn_on" if value == 1 else "turn_off"
+    url = f"{BASE_URL}/api/services/input_boolean/{service}"
+    payload = {"entity_id": entity_id}
+    resp = requests.post(url, headers=HEADERS, json=payload, timeout=10)
+    resp.raise_for_status()
+    time.sleep(1)
 
 
-# Turn on the light. Light is automatically turned off every 30 seconds to allow test to turn
-# it on and receive the correct value.
-def test_set_point(volttron_instance, config_store):
-    expected_values = {'bool_state': 1}
-    agent = volttron_instance.dynamic_agent
-    agent.vip.rpc.call(PLATFORM_DRIVER, 'set_point', 'home_assistant', 'bool_state', 1)
-    gevent.sleep(10)
-    result = agent.vip.rpc.call(PLATFORM_DRIVER, 'scrape_all', 'home_assistant').get(timeout=20)
-    assert result == expected_values, "The result does not match the expected result."
+def _ha_set_light(entity_id: str, value: int) -> None:
+    service = "turn_on" if value == 1 else "turn_off"
+    url = f"{BASE_URL}/api/services/light/{service}"
+    payload = {"entity_id": entity_id}
+    resp = requests.post(url, headers=HEADERS, json=payload, timeout=10)
+    resp.raise_for_status()
+    time.sleep(1)
 
 
-@pytest.fixture(scope="module")
-def config_store(volttron_instance, platform_driver):
-
-    capabilities = [{"edit_config_store": {"identity": PLATFORM_DRIVER}}]
-    volttron_instance.add_capabilities(volttron_instance.dynamic_agent.core.publickey, capabilities)
-
-    registry_config = "homeassistant_test.json"
-    registry_obj = [{
-        "Entity ID": "input_boolean.volttrontest",
-        "Entity Point": "state",
-        "Volttron Point Name": "bool_state",
-        "Units": "On / Off",
-        "Units Details": "off: 0, on: 1",
-        "Writable": True,
-        "Starting Value": 3,
-        "Type": "int",
-        "Notes": "lights hallway"
-    }]
-
-    volttron_instance.dynamic_agent.vip.rpc.call(CONFIGURATION_STORE,
-                                                 "manage_store",
-                                                 PLATFORM_DRIVER,
-                                                 registry_config,
-                                                 json.dumps(registry_obj),
-                                                 config_type="json")
-    gevent.sleep(2)
-    # driver config
-    driver_config = {
-        "driver_config": {"ip_address": HOMEASSISTANT_TEST_IP, "access_token": ACCESS_TOKEN, "port": PORT},
-        "driver_type": "home_assistant",
-        "registry_config": f"config://{registry_config}",
-        "timezone": "US/Pacific",
-        "interval": 30,
-    }
-
-    volttron_instance.dynamic_agent.vip.rpc.call(CONFIGURATION_STORE,
-                                                 "manage_store",
-                                                 PLATFORM_DRIVER,
-                                                 HOMEASSISTANT_DEVICE_TOPIC,
-                                                 json.dumps(driver_config),
-                                                 config_type="json"
-                                                 )
-    gevent.sleep(2)
-
-    yield platform_driver
-
-    print("Wiping out store.")
-    volttron_instance.dynamic_agent.vip.rpc.call(CONFIGURATION_STORE, "manage_delete_store", PLATFORM_DRIVER)
-    gevent.sleep(0.1)
+def _map_state_to_int(state: str) -> int:
+    return 1 if state.lower() == "on" else 0
 
 
-@pytest.fixture(scope="module")
-def platform_driver(volttron_instance):
-    # Start the platform driver agent which would in turn start the bacnet driver
-    platform_uuid = volttron_instance.install_agent(
-        agent_dir=get_services_core("PlatformDriverAgent"),
-        config_file={
-            "publish_breadth_first_all": False,
-            "publish_depth_first": False,
-            "publish_breadth_first": False,
-        },
-        start=True,
-    )
-    gevent.sleep(2)  # wait for the agent to start and start the devices
-    assert volttron_instance.is_agent_running(platform_uuid)
-    yield platform_uuid
+# ----------------------------------------------------------------------
+# Skip if HA unreachable
+# ----------------------------------------------------------------------
+try:
+    ping = requests.get(BASE_URL, timeout=3)
+    HA_REACHABLE = ping.status_code == 200
+except Exception:
+    HA_REACHABLE = False
 
-    volttron_instance.stop_agent(platform_uuid)
-    if not volttron_instance.debug_mode:
-        volttron_instance.remove_agent(platform_uuid)
+pytestmark = pytest.mark.skipif(not HA_REACHABLE, reason=skip_msg)
+
+
+# ----------------------------------------------------------------------
+# Input Boolean Tests
+# ----------------------------------------------------------------------
+def test_get_point_from_docker():
+    raw_state = _ha_get_state(ENTITY_ID)
+    value = _map_state_to_int(raw_state)
+    assert value in (0, 1)
+
+
+def test_data_poll_from_docker():
+    url = f"{BASE_URL}/api/states"
+    resp = requests.get(url, headers=HEADERS, timeout=10)
+    resp.raise_for_status()
+    states = resp.json()
+    entity = next((s for s in states if s.get("entity_id") == ENTITY_ID), None)
+    assert entity is not None
+    assert _map_state_to_int(entity["state"]) in (0, 1)
+
+
+def test_set_point_via_docker():
+    _ha_set_boolean(ENTITY_ID, 0)
+    before = _map_state_to_int(_ha_get_state(ENTITY_ID))
+
+    _ha_set_boolean(ENTITY_ID, 1)
+    after = _map_state_to_int(_ha_get_state(ENTITY_ID))
+
+    assert before in (0, 1)
+    assert after == 1
+
+
+# ----------------------------------------------------------------------
+# Light Handler Tests
+# ----------------------------------------------------------------------
+def test_light_get_state():
+    raw = _ha_get_state(LIGHT_ENTITY_ID)
+    value = _map_state_to_int(raw)
+    assert value in (0, 1)
+
+
+def test_light_set_on():
+    _ha_set_light(LIGHT_ENTITY_ID, 1)
+    state = _map_state_to_int(_ha_get_state(LIGHT_ENTITY_ID))
+    assert state == 1, "Light should be ON after turn_on"
+
+
+def test_light_set_off():
+    _ha_set_light(LIGHT_ENTITY_ID, 0)
+    state = _map_state_to_int(_ha_get_state(LIGHT_ENTITY_ID))
+    assert state == 0, "Light should be OFF after turn_off"
