@@ -26,7 +26,8 @@ BASE_URL = f"http://{HOMEASSISTANT_TEST_IP}:{PORT}"
 
 # Entities to test
 ENTITY_ID = "input_boolean.volttrontest"
-LIGHT_ENTITY_ID = "light.test_light"  
+LIGHT_ENTITY_ID = "light.test_light"   
+LOCK_ENTITY_ID = "lock.test_lock"
 
 HEADERS = {
     "Authorization": f"Bearer {ACCESS_TOKEN}",
@@ -63,9 +64,23 @@ def _ha_set_light(entity_id: str, value: int) -> None:
     resp.raise_for_status()
     time.sleep(1)
 
+def _ha_set_lock(entity_id: str, value: int) -> None:
+    service = "lock" if value == 1 else "unlock"
+    url = f"{BASE_URL}/api/services/lock/{service}"
+    payload = {"entity_id": entity_id}
+    resp = requests.post(url, headers=HEADERS, json=payload, timeout=10)
+    resp.raise_for_status()
+    time.sleep(1)
+
+
 
 def _map_state_to_int(state: str) -> int:
-    return 1 if state.lower() == "on" else 0
+    """Map HA states to 0/1"""
+    if state.lower() in ("on", "locked"):
+        return 1
+    else:
+        return 0
+
 
 
 # ----------------------------------------------------------------------
@@ -129,3 +144,66 @@ def test_light_set_off():
     _ha_set_light(LIGHT_ENTITY_ID, 0)
     state = _map_state_to_int(_ha_get_state(LIGHT_ENTITY_ID))
     assert state == 0, "Light should be OFF after turn_off"
+
+
+# ----------------------------------------------------------------------
+# Lock Handler Tests
+# ----------------------------------------------------------------------
+def test_lock_get_state():
+    raw = _ha_get_state(LOCK_ENTITY_ID)
+    value = _map_state_to_int(raw)
+    assert value in (0, 1)
+
+
+def test_lock_set_locked():
+    _ha_set_lock(LOCK_ENTITY_ID, 1)
+    state = _map_state_to_int(_ha_get_state(LOCK_ENTITY_ID))
+    assert state == 1, "Lock should be LOCKED after lock service"
+
+
+def test_lock_set_unlocked():
+    _ha_set_lock(LOCK_ENTITY_ID, 0)
+    state = _map_state_to_int(_ha_get_state(LOCK_ENTITY_ID))
+    assert state == 0, "Lock should be UNLOCKED after unlock service"
+
+
+def test_lock_attributes_exist():
+    """
+    Minimal attribute test.
+    Lock entities usually have several attributes.
+    """
+    url = f"{BASE_URL}/api/states/{LOCK_ENTITY_ID}"
+    resp = requests.get(url, headers=HEADERS, timeout=10)
+    resp.raise_for_status()
+
+    data = resp.json()
+    attrs = data.get("attributes", {})
+
+    assert isinstance(attrs, dict)
+    assert len(attrs) >= 1, "Lock entity should have at least one attribute"
+
+
+def test_lock_handler_get_state():
+    """
+    Tests get_state() of LockHandler directly.
+    """
+    from platform_driver.interfaces.device_handlers.lock_handler import LockHandler
+
+    # Fake API stub
+    class APIStub:
+        def get_state(self, entity_id):
+            return {
+                "state": "locked",
+                "attributes": {"friendly_name": "Test Lock"}
+            }
+
+    api_stub = APIStub()
+    handler = LockHandler(api_stub, LOCK_ENTITY_ID)
+
+    # State check
+    state = handler.get_state("state")
+    assert state == "locked"
+
+    # Attribute check
+    attr = handler.get_state("friendly_name")
+    assert attr == "Test Lock"
