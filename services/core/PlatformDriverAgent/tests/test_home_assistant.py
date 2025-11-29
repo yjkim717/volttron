@@ -207,3 +207,78 @@ def test_lock_handler_get_state():
     # Attribute check
     attr = handler.get_state("friendly_name")
     assert attr == "Test Lock"
+
+# ----------------------------------------------------------------------
+# Climate Handler Tests
+# ----------------------------------------------------------------------
+
+CLIMATE_ENTITY_ID = "climate.test_climate"
+
+
+def _ha_set_climate_temperature(entity_id: str, temperature: float) -> None:
+    """
+    Home Assistant climate service:
+    POST /api/services/climate/set_temperature
+    payload = { "entity_id": ..., "temperature": X }
+    """
+    url = f"{BASE_URL}/api/services/climate/set_temperature"
+    payload = {"entity_id": entity_id, "temperature": temperature}
+
+    resp = requests.post(url, headers=HEADERS, json=payload, timeout=10)
+    resp.raise_for_status()
+    time.sleep(1)
+
+
+def test_climate_get_state():
+    """
+    Basic climate state read (e.g., 'heat', 'cool', 'off').
+    """
+    raw = _ha_get_state(CLIMATE_ENTITY_ID)
+    assert isinstance(raw, str)
+    assert len(raw) > 0
+
+
+
+def test_climate_attributes_exist():
+    """
+    Ensure attributes like HVAC modes, min/max temps, etc. exist.
+    """
+    url = f"{BASE_URL}/api/states/{CLIMATE_ENTITY_ID}"
+    resp = requests.get(url, headers=HEADERS, timeout=10)
+    resp.raise_for_status()
+
+    attrs = resp.json().get("attributes", {})
+    assert isinstance(attrs, dict)
+    assert len(attrs) > 0
+    assert "hvac_modes" in attrs or "temperature" in attrs
+
+
+def test_climate_handler_get_state():
+    """
+    Unit-test ClimateHandler directly (no docker).
+    """
+    from platform_driver.interfaces.device_handlers.climate_handler import ClimateHandler
+
+    class APIStub:
+        def get_state(self, eid):
+            return {
+                "state": "cool",
+                "attributes": {
+                    "temperature": 21.0,
+                    "hvac_modes": ["off", "cool", "heat"]
+                }
+            }
+
+    api_stub = APIStub()
+    handler = ClimateHandler(api_stub, CLIMATE_ENTITY_ID)
+
+    # state
+    hvac_state = handler.get_state("state")
+    assert hvac_state == "cool"
+
+    # attribute
+    temp = handler.get_state("temperature")
+    assert temp == 21.0
+
+    modes = handler.get_state("hvac_modes")
+    assert modes == ["off", "cool", "heat"]

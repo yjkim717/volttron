@@ -1,0 +1,44 @@
+2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: === Pytest session started ===
+2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] ===== GENERAL Feature Test Started =====
+2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] START: tests/test_home_assistant.py::test_get_point_from_docker (File: tests/test_home_assistant.py, Line: 100, Function: test_get_point_from_docker)
+2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] PASS: tests/test_home_assistant.py::test_get_point_from_docker (Duration: 0.026s)
+2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] START: tests/test_home_assistant.py::test_data_poll_from_docker (File: tests/test_home_assistant.py, Line: 106, Function: test_data_poll_from_docker)
+2025-11-29 02:57:39 [INFO] HA_TEST_LOGGER: [GENERAL] PASS: tests/test_home_assistant.py::test_data_poll_from_docker (Duration: 1.025s)
+2025-11-29 02:57:39 [INFO] HA_TEST_LOGGER: [GENERAL] START: tests/test_home_assistant.py::test_set_point_via_docker (File: tests/test_home_assistant.py, Line: 116, Function: test_set_point_via_docker)
+2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [GENERAL] PASS: tests/test_home_assistant.py::test_set_point_via_docker (Duration: 2.118s)
+2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] ===== LIGHT Feature Test Started =====
+2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] START: tests/test_home_assistant.py::test_light_get_state (File: tests/test_home_assistant.py, Line: 130, Function: test_light_get_state)
+2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] PASS: tests/test_home_assistant.py::test_light_get_state (Duration: 0.018s)
+2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] START: tests/test_home_assistant.py::test_light_set_on (File: tests/test_home_assistant.py, Line: 136, Function: test_light_set_on)
+2025-11-29 02:57:42 [INFO] HA_TEST_LOGGER: [LIGHT] PASS: tests/test_home_assistant.py::test_light_set_on (Duration: 1.093s)
+2025-11-29 02:57:42 [INFO] HA_TEST_LOGGER: [LIGHT] START: tests/test_home_assistant.py::test_light_set_off (File: tests/test_home_assistant.py, Line: 142, Function: test_light_set_off)
+2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LIGHT] PASS: tests/test_home_assistant.py::test_light_set_off (Duration: 1.250s)
+2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] ===== LOCK Feature Test Started =====
+2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_get_state (File: tests/test_home_assistant.py, Line: 151, Function: test_lock_get_state)
+2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_get_state (Duration: 0.020s)
+2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_set_locked (File: tests/test_home_assistant.py, Line: 157, Function: test_lock_set_locked)
+2025-11-29 02:57:45 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_set_locked (Duration: 1.092s)
+2025-11-29 02:57:45 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_set_unlocked (File: tests/test_home_assistant.py, Line: 163, Function: test_lock_set_unlocked)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_set_unlocked (Duration: 1.055s)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_attributes_exist (File: tests/test_home_assistant.py, Line: 169, Function: test_lock_attributes_exist)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_attributes_exist (Duration: 0.023s)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_handler_get_state (File: tests/test_home_assistant.py, Line: 185, Function: test_lock_handler_get_state)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_handler_get_state (Duration: 0.002s)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] ===== CLIMATE Feature Test Started =====
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] START: tests/test_home_assistant.py::test_climate_get_state (File: tests/test_home_assistant.py, Line: 231, Function: test_climate_get_state)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] PASS: tests/test_home_assistant.py::test_climate_get_state (Duration: 0.023s)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] START: tests/test_home_assistant.py::test_climate_attributes_exist (File: tests/test_home_assistant.py, Line: 241, Function: test_climate_attributes_exist)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] PASS: tests/test_home_assistant.py::test_climate_attributes_exist (Duration: 0.018s)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] START: tests/test_home_assistant.py::test_climate_handler_get_state (File: tests/test_home_assistant.py, Line: 255, Function: test_climate_handler_get_state)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] PASS: tests/test_home_assistant.py::test_climate_handler_get_state (Duration: 0.001s)
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: === Pytest session finished ===
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: --- Feature Test Summary ---
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] ===== CLIMATE Feature Test PASSED (3/3 tests passed, 0 skipped) =====
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [GENERAL] ===== GENERAL Feature Test PASSED (3/3 tests passed, 0 skipped) =====
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LIGHT] ===== LIGHT Feature Test PASSED (3/3 tests passed, 0 skipped) =====
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] ===== LOCK Feature Test PASSED (5/5 tests passed, 0 skipped) =====
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: --- Overall Summary: 14 passed, 0 failed, 0 skipped ---
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: Exit status: 0
+2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: Log file saved to: /home/jenny/volttron/services/core/PlatformDriverAgent/tests_logs/pytest_2025-11-29.log
+xit status: 0
+2025-11-29 02:57:46,480 [INFO] HA_TEST_LOGGER: Log file saved to: /home/jenny/volttron/services/core/PlatformDriverAgent/tests_logs/pytest_2025-11-29.log
