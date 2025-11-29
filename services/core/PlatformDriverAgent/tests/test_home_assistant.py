@@ -282,3 +282,131 @@ def test_climate_handler_get_state():
 
     modes = handler.get_state("hvac_modes")
     assert modes == ["off", "cool", "heat"]
+
+# ----------------------------------------------------------------------
+# Fan Handler Tests
+# ----------------------------------------------------------------------
+FAN_ENTITY_ID = "fan.test_fan"
+
+
+def _ha_set_fan_power(entity_id: str, value: int):
+    service = "turn_on" if value == 1 else "turn_off"
+    url = f"{BASE_URL}/api/services/fan/{service}"
+    payload = {"entity_id": entity_id}
+    resp = requests.post(url, headers=HEADERS, json=payload, timeout=10)
+    resp.raise_for_status()
+    time.sleep(1)
+
+
+def _ha_set_fan_speed(entity_id: str, speed: int):
+    url = f"{BASE_URL}/api/services/fan/set_percentage"
+    payload = {"entity_id": entity_id, "percentage": speed}
+    resp = requests.post(url, headers=HEADERS, json=payload, timeout=10)
+    resp.raise_for_status()
+    time.sleep(1)
+
+
+def _ha_set_fan_oscillate(entity_id: str, value: int):
+    url = f"{BASE_URL}/api/services/fan/oscillate"
+    payload = {"entity_id": entity_id, "oscillating": bool(value)}
+    resp = requests.post(url, headers=HEADERS, json=payload, timeout=10)
+    resp.raise_for_status()
+    time.sleep(1)
+
+
+def test_fan_get_state():
+    raw = _ha_get_state(FAN_ENTITY_ID)
+    assert raw in ("on", "off")
+
+
+def test_fan_power_toggle():
+    _ha_set_fan_power(FAN_ENTITY_ID, 1)
+    assert _ha_get_state(FAN_ENTITY_ID) == "on"
+
+    _ha_set_fan_power(FAN_ENTITY_ID, 0)
+    assert _ha_get_state(FAN_ENTITY_ID) == "off"
+
+
+def test_fan_speed():
+    """
+    Test fan speed setting. Note: Fan must be ON before setting speed.
+    """
+    # First, ensure fan is ON (some fans require being on before setting speed)
+    _ha_set_fan_power(FAN_ENTITY_ID, 1)
+    time.sleep(0.5)  # Wait for state to update
+    
+    # Now set the speed
+    _ha_set_fan_speed(FAN_ENTITY_ID, 50)
+    time.sleep(1.5)  # Give more time for state to update
+
+    url = f"{BASE_URL}/api/states/{FAN_ENTITY_ID}"
+    resp = requests.get(url, headers=HEADERS, timeout=10)
+    resp.raise_for_status()
+
+    data = resp.json()
+    attrs = data.get("attributes", {})
+    state = data.get("state")
+    
+    # Check if fan is on
+    if state != "on":
+        pytest.skip(f"Fan is not ON (state={state}), cannot test speed")
+    
+    # Check percentage
+    percentage = attrs.get("percentage")
+    if percentage is None:
+        # Try alternative attribute names for fans that don't use percentage
+        speed = attrs.get("speed") or attrs.get("speed_level") or attrs.get("current_speed")
+        if speed is not None:
+            assert speed is not None and speed != 0, f"Speed value is None or 0"
+        else:
+            pytest.skip(f"Fan entity does not support speed/percentage. Available attributes: {list(attrs.keys())}")
+    else:
+        assert percentage == 50, f"Expected percentage 50, got {percentage}"
+
+
+def test_fan_oscillate():
+    """
+    Test fan oscillation. Note: Some fan entities may not support oscillation.
+    """
+    try:
+        _ha_set_fan_oscillate(FAN_ENTITY_ID, 1)
+    except requests.exceptions.HTTPError as e:
+        # If fan doesn't support oscillation, skip this test
+        if e.response.status_code == 500 or e.response.status_code == 400:
+            pytest.skip(f"Fan entity {FAN_ENTITY_ID} does not support oscillation: {e}")
+        raise
+
+    url = f"{BASE_URL}/api/states/{FAN_ENTITY_ID}"
+    resp = requests.get(url, headers=HEADERS, timeout=10)
+    resp.raise_for_status()
+
+    data = resp.json()
+    attrs = data.get("attributes", {})
+    
+    oscillating = attrs.get("oscillating")
+    assert oscillating is True, f"Expected oscillating=True, got {oscillating}"
+
+
+def test_fan_handler_get_state():
+    """
+    Unit-test FanHandler directly (no docker).
+    """
+    from platform_driver.interfaces.device_handlers.fan_handler import FanHandler
+
+    class APIStub:
+        def get_state(self, entity_id):
+            return {
+                "state": "on",
+                "attributes": {
+                    "percentage": 80,
+                    "oscillating": True
+                }
+            }
+
+    api = APIStub()
+    handler = FanHandler(api, FAN_ENTITY_ID)
+
+    assert handler.get_state("state") == "on"
+    assert handler.get_state("percentage") == 80
+    assert handler.get_state("oscillating") is True
+

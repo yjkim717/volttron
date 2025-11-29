@@ -1,44 +1,78 @@
-2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: === Pytest session started ===
-2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] ===== GENERAL Feature Test Started =====
-2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] START: tests/test_home_assistant.py::test_get_point_from_docker (File: tests/test_home_assistant.py, Line: 100, Function: test_get_point_from_docker)
-2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] PASS: tests/test_home_assistant.py::test_get_point_from_docker (Duration: 0.026s)
-2025-11-29 02:57:38 [INFO] HA_TEST_LOGGER: [GENERAL] START: tests/test_home_assistant.py::test_data_poll_from_docker (File: tests/test_home_assistant.py, Line: 106, Function: test_data_poll_from_docker)
-2025-11-29 02:57:39 [INFO] HA_TEST_LOGGER: [GENERAL] PASS: tests/test_home_assistant.py::test_data_poll_from_docker (Duration: 1.025s)
-2025-11-29 02:57:39 [INFO] HA_TEST_LOGGER: [GENERAL] START: tests/test_home_assistant.py::test_set_point_via_docker (File: tests/test_home_assistant.py, Line: 116, Function: test_set_point_via_docker)
-2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [GENERAL] PASS: tests/test_home_assistant.py::test_set_point_via_docker (Duration: 2.118s)
-2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] ===== LIGHT Feature Test Started =====
-2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] START: tests/test_home_assistant.py::test_light_get_state (File: tests/test_home_assistant.py, Line: 130, Function: test_light_get_state)
-2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] PASS: tests/test_home_assistant.py::test_light_get_state (Duration: 0.018s)
-2025-11-29 02:57:41 [INFO] HA_TEST_LOGGER: [LIGHT] START: tests/test_home_assistant.py::test_light_set_on (File: tests/test_home_assistant.py, Line: 136, Function: test_light_set_on)
-2025-11-29 02:57:42 [INFO] HA_TEST_LOGGER: [LIGHT] PASS: tests/test_home_assistant.py::test_light_set_on (Duration: 1.093s)
-2025-11-29 02:57:42 [INFO] HA_TEST_LOGGER: [LIGHT] START: tests/test_home_assistant.py::test_light_set_off (File: tests/test_home_assistant.py, Line: 142, Function: test_light_set_off)
-2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LIGHT] PASS: tests/test_home_assistant.py::test_light_set_off (Duration: 1.250s)
-2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] ===== LOCK Feature Test Started =====
-2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_get_state (File: tests/test_home_assistant.py, Line: 151, Function: test_lock_get_state)
-2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_get_state (Duration: 0.020s)
-2025-11-29 02:57:44 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_set_locked (File: tests/test_home_assistant.py, Line: 157, Function: test_lock_set_locked)
-2025-11-29 02:57:45 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_set_locked (Duration: 1.092s)
-2025-11-29 02:57:45 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_set_unlocked (File: tests/test_home_assistant.py, Line: 163, Function: test_lock_set_unlocked)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_set_unlocked (Duration: 1.055s)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_attributes_exist (File: tests/test_home_assistant.py, Line: 169, Function: test_lock_attributes_exist)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_attributes_exist (Duration: 0.023s)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] START: tests/test_home_assistant.py::test_lock_handler_get_state (File: tests/test_home_assistant.py, Line: 185, Function: test_lock_handler_get_state)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] PASS: tests/test_home_assistant.py::test_lock_handler_get_state (Duration: 0.002s)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] ===== CLIMATE Feature Test Started =====
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] START: tests/test_home_assistant.py::test_climate_get_state (File: tests/test_home_assistant.py, Line: 231, Function: test_climate_get_state)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] PASS: tests/test_home_assistant.py::test_climate_get_state (Duration: 0.023s)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] START: tests/test_home_assistant.py::test_climate_attributes_exist (File: tests/test_home_assistant.py, Line: 241, Function: test_climate_attributes_exist)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] PASS: tests/test_home_assistant.py::test_climate_attributes_exist (Duration: 0.018s)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] START: tests/test_home_assistant.py::test_climate_handler_get_state (File: tests/test_home_assistant.py, Line: 255, Function: test_climate_handler_get_state)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] PASS: tests/test_home_assistant.py::test_climate_handler_get_state (Duration: 0.001s)
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: === Pytest session finished ===
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: --- Feature Test Summary ---
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [CLIMATE] ===== CLIMATE Feature Test PASSED (3/3 tests passed, 0 skipped) =====
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [GENERAL] ===== GENERAL Feature Test PASSED (3/3 tests passed, 0 skipped) =====
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LIGHT] ===== LIGHT Feature Test PASSED (3/3 tests passed, 0 skipped) =====
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: [LOCK] ===== LOCK Feature Test PASSED (5/5 tests passed, 0 skipped) =====
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: --- Overall Summary: 14 passed, 0 failed, 0 skipped ---
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: Exit status: 0
-2025-11-29 02:57:46 [INFO] HA_TEST_LOGGER: Log file saved to: /home/jenny/volttron/services/core/PlatformDriverAgent/tests_logs/pytest_2025-11-29.log
-xit status: 0
-2025-11-29 02:57:46,480 [INFO] HA_TEST_LOGGER: Log file saved to: /home/jenny/volttron/services/core/PlatformDriverAgent/tests_logs/pytest_2025-11-29.log
+2025-11-29 04:28:26 [INFO] HA_TEST_LOGGER: Pytest session started
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER: [GENERAL] Feature Test Started
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER:   [GENERAL] START: test_get_point_from_docker (Line 100)
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER:   [GENERAL] PASS: test_get_point_from_docker (0.028s)
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER:   [GENERAL] START: test_data_poll_from_docker (Line 106)
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER:   [GENERAL] PASS: test_data_poll_from_docker (0.023s)
+2025-11-29 04:28:27 [INFO] HA_TEST_LOGGER:   [GENERAL] START: test_set_point_via_docker (Line 116)
+2025-11-29 04:28:29 [INFO] HA_TEST_LOGGER:   [GENERAL] PASS: test_set_point_via_docker (2.329s)
+2025-11-29 04:28:29 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:29 [INFO] HA_TEST_LOGGER: [LIGHT] Feature Test Started
+2025-11-29 04:28:29 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:29 [INFO] HA_TEST_LOGGER:   [LIGHT] START: test_light_get_state (Line 130)
+2025-11-29 04:28:29 [INFO] HA_TEST_LOGGER:   [LIGHT] PASS: test_light_get_state (0.018s)
+2025-11-29 04:28:29 [INFO] HA_TEST_LOGGER:   [LIGHT] START: test_light_set_on (Line 136)
+2025-11-29 04:28:30 [INFO] HA_TEST_LOGGER:   [LIGHT] PASS: test_light_set_on (1.058s)
+2025-11-29 04:28:30 [INFO] HA_TEST_LOGGER:   [LIGHT] START: test_light_set_off (Line 142)
+2025-11-29 04:28:31 [INFO] HA_TEST_LOGGER:   [LIGHT] PASS: test_light_set_off (1.160s)
+2025-11-29 04:28:31 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:31 [INFO] HA_TEST_LOGGER: [LOCK] Feature Test Started
+2025-11-29 04:28:31 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:31 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_get_state (Line 151)
+2025-11-29 04:28:31 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_get_state (0.021s)
+2025-11-29 04:28:31 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_set_locked (Line 157)
+2025-11-29 04:28:32 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_set_locked (1.082s)
+2025-11-29 04:28:32 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_set_unlocked (Line 163)
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_set_unlocked (1.138s)
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_attributes_exist (Line 169)
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_attributes_exist (0.018s)
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_handler_get_state (Line 185)
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_handler_get_state (0.002s)
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER: [CLIMATE] Feature Test Started
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:33 [INFO] HA_TEST_LOGGER:   [CLIMATE] START: test_climate_get_state (Line 231)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASS: test_climate_get_state (0.023s)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [CLIMATE] START: test_climate_attributes_exist (Line 241)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASS: test_climate_attributes_exist (0.019s)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [CLIMATE] START: test_climate_handler_get_state (Line 255)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASS: test_climate_handler_get_state (0.002s)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER: [FAN] Feature Test Started
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_get_state (Line 316)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_get_state (0.028s)
+2025-11-29 04:28:34 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_power_toggle (Line 321)
+2025-11-29 04:28:36 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_power_toggle (2.227s)
+2025-11-29 04:28:36 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_speed (Line 329)
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_speed (5.225s)
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_oscillate (Line 366)
+2025-11-29 04:28:41 [WARNING] HA_TEST_LOGGER:   [FAN] SKIPPED: test_fan_oscillate - ('/home/jenny/volttron/services/core/PlatformDriverAgent/tests/test_home_assistant.py', 376, 'Skipped: Fan entity fan.test_fan does not support oscillation: 500 Server Error: Internal Server Error for url: http://192.168.0.142:8123/api/services/fan/oscillate')
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_handler_get_state (Line 389)
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_handler_get_state (0.001s)
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: 
+════════════════════════════════════════════════════════════════════════════════
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: Pytest session finished
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: ════════════════════════════════════════════════════════════════════════════════
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: 
+Feature Test Summary
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASSED: 3/3 tests passed
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [FAN] PASSED: 4/5 tests passed, 1 skipped
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [GENERAL] PASSED: 3/3 tests passed
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [LIGHT] PASSED: 3/3 tests passed
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   [LOCK] PASSED: 5/5 tests passed
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER:   Overall: 18 passed, 0 failed, 1 skipped (PASSED)
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: ════════════════════════════════════════════════════════════════════════════════
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: 
+Log file: /home/jenny/volttron/services/core/PlatformDriverAgent/tests_logs/pytest_2025-11-29.log
+2025-11-29 04:28:41 [INFO] HA_TEST_LOGGER: Exit status: 0
+

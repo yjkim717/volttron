@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging
+from typing import Dict, Tuple, Callable
 
 _log = logging.getLogger(__name__)
 
-class FanHandler(BaseDeviceHandler):
+
+class FanHandler:
     """
     Fan Handler:
     - Supports turning fan on or off via Home Assistant fan.turn_on / fan.turn_off
-    - Supports toggling fan oscillation via Home Assitant fan.oscillate
+    - Supports toggling fan oscillation via Home Assistant fan.oscillate
     - Supports adjusting fan speed via Home Assistant fan.set_percentage
     - Supports reading both state & attributes for testing
     """
@@ -15,53 +17,94 @@ class FanHandler(BaseDeviceHandler):
     def __init__(self, api, entity_id):
         self.api = api
         self.entity_id = entity_id
+        # Registry pattern: Map entity_point to handler method
+        self._state_handlers: Dict[str, Callable[[int], Tuple[str, dict]]] = {
+            "oscillate": self._handle_oscillate,
+            "power": self._handle_power,
+            "speed": self._handle_speed,
+        }
 
-    # Unified setter
-    def set_state(self, entity_point, value):
+    def set_state(self, entity_point: str, value: int) -> None:
         """
-        entity_point = oscillate, value = 1/0 -> oscillating/not oscillating
-        entity_point = power, value = 1/0 -> fan on/fan off
-        entity_point = speed, value = 0-100 -> sets fan speed
+        Unified setter using Strategy pattern.
+        
+        Args:
+            entity_point: "oscillate", "power", or "speed"
+            value: 
+                - oscillate: 0 (off) or 1 (on)
+                - power: 0 (off) or 1 (on)
+                - speed: 0-100 (percentage)
         """
-        if entity_point = "oscillate":
-            if value not in (0, 1):
-                raise ValueError("Fan oscillation must be 0 (not oscillating) or 1 (oscillating).")
-            service = "oscillate"
-        
-        if entity_point = "power"
-            if value not in (0, 1):
-                raise ValueError("Fan power must be 0 (off) or 1 (on).")
+        # Strategy pattern: Look up handler from registry
+        handler = self._state_handlers.get(entity_point)
+        if handler is None:
+            raise ValueError(
+                f"Unsupported entity_point '{entity_point}' for FanHandler. "
+                f"Supported: {list(self._state_handlers.keys())}"
+            )
 
-            if value == 0:
-                service = "turn_off"
-            else:
-                service = "turn_on"
+        # Delegate to specific handler strategy
+        service, payload = handler(value)
         
-        if entity_point = "speed"
-            if value not in range(0, 101):
-                raise ValueError("Fan speed percentage must be between 0 and 100 inclusive")
-            if value == 0:
-                service = "turn_off"
-            else:
-                service = "set_percentage"
-
         _log.info(
             "[FAN] %s → service=%s value=%s",
             self.entity_id, service, value
         )
 
-        self.api.call_service("fan", service, self.entity_id)
+        # Call HA service
+        self.api.call_service("fan", service, payload)
+
+    # Strategy methods: Each entity_point has its own handler
+    def _handle_oscillate(self, value: int) -> Tuple[str, dict]:
+        """Strategy for handling oscillate entity_point"""
+        if value not in (0, 1):
+            raise ValueError(
+                "Fan oscillation must be 0 (not oscillating) or 1 (oscillating)."
+            )
+        return "oscillate", {
+            "entity_id": self.entity_id,
+            "oscillating": bool(value)
+        }
+
+    def _handle_power(self, value: int) -> Tuple[str, dict]:
+        """Strategy for handling power entity_point"""
+        if value not in (0, 1):
+            raise ValueError("Fan power must be 0 (off) or 1 (on).")
+
+        service = "turn_off" if value == 0 else "turn_on"
+        return service, {"entity_id": self.entity_id}
+
+    def _handle_speed(self, value: int) -> Tuple[str, dict]:
+        """Strategy for handling speed entity_point"""
+        if not (0 <= value <= 100):
+            raise ValueError(
+                "Fan speed percentage must be between 0 and 100 inclusive"
+            )
+
+        if value == 0:
+            # Home Assistant convention: 0% = turn_off
+            return "turn_off", {"entity_id": self.entity_id}
+        else:
+            return "set_percentage", {
+                "entity_id": self.entity_id,
+                "percentage": value
+            }
 
     # get_state for testing
     def get_state(self, entity_point):
         """
-        entity_point="properties.oscillating" → returns "true" / "false"
+        entity_point="oscillating" → returns True/False
         entity_point="<attribute>" → returns HA attribute value
         """
         state_data = self.api.get_state(self.entity_id)
 
+        # Fan's "state" = "on"/"off"
+        if entity_point == "state":
+            return state_data.get("state")
+
         # Attributes
         return state_data.get("attributes", {}).get(entity_point)
+    
 
 
 """
