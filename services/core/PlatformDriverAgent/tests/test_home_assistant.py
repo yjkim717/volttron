@@ -16,19 +16,17 @@ import pytest
 # ----------------------------------------------------------------------
 # Home Assistant connection configuration
 # ----------------------------------------------------------------------
-HOMEASSISTANT_TEST_IP = "192.168.0.100"
+HOMEASSISTANT_TEST_IP = "192.168.0.142"
 PORT = 8123
 ACCESS_TOKEN = (
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
-    "eyJpc3MiOiJiNGQ1ZjhiMWU2YWI0MmI0OTRkMDBjMjg0ODMxZDc4MyIsImlhdCI6MTc2Mzg2OTU0NSwiZXhwIjoyMDc5MjI5NTQ1fQ."
-    "KaLaUSol07sSBphBpYM4y75lUzO1iGu4oIoj_F2Adw0"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhZTI2ZTE0OGU4MWU0Y2I1OGI2YTkzOWE2MzQ3N2MyZiIsImlhdCI6MTc2NDM5MDU2NiwiZXhwIjoyMDc5NzUwNTY2fQ.9ZgFzqCuf-BCgv-atT_XVwGHutvjaefK9J7SFQbf9mI"
 )
 
 BASE_URL = f"http://{HOMEASSISTANT_TEST_IP}:{PORT}"
 
 # Entities to test
 ENTITY_ID = "input_boolean.volttrontest"
-LIGHT_ENTITY_ID = "light.test_light"   # <--- 반드시 네 HA 실제 light로 바꿔줘
+LIGHT_ENTITY_ID = "light.test_light"  
 
 HEADERS = {
     "Authorization": f"Bearer {ACCESS_TOKEN}",
