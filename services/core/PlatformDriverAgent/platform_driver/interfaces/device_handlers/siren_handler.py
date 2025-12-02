@@ -2,7 +2,7 @@
 """
 SirenHandler
 
-Implements Home Assistant siren control using the shared BaseDeviceHandler
+Implement Home Assistant siren control using the shared BaseDeviceHandler
 infrastructure. This handler supports a single entity_point ("state") for
 turning the siren on or off. All state retrieval is delegated to the unified
 HomeAssistantAPI interface.
