@@ -34,6 +34,7 @@ class LockHandler:
         self.api = api
         self.entity_id = entity_id
 
+    # Unified setter
     def set_state(self, value):
         """
         Set the lock state.
