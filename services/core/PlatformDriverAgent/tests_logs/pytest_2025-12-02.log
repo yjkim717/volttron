@@ -1,0 +1,93 @@
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER: Pytest session started
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER: [GENERAL] Feature Test Started
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER:   [GENERAL] START: test_get_point_from_docker (Line 111)
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER:   [GENERAL] PASS: test_get_point_from_docker (0.061s)
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER:   [GENERAL] START: test_data_poll_from_docker (Line 117)
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER:   [GENERAL] PASS: test_data_poll_from_docker (0.027s)
+2025-12-02 23:06:19 [INFO] HA_TEST_LOGGER:   [GENERAL] START: test_set_point_via_docker (Line 127)
+2025-12-02 23:06:22 [INFO] HA_TEST_LOGGER:   [GENERAL] PASS: test_set_point_via_docker (2.643s)
+2025-12-02 23:06:22 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:22 [INFO] HA_TEST_LOGGER: [LIGHT] Feature Test Started
+2025-12-02 23:06:22 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:22 [INFO] HA_TEST_LOGGER:   [LIGHT] START: test_light_get_state (Line 141)
+2025-12-02 23:06:22 [INFO] HA_TEST_LOGGER:   [LIGHT] PASS: test_light_get_state (0.084s)
+2025-12-02 23:06:22 [INFO] HA_TEST_LOGGER:   [LIGHT] START: test_light_set_on (Line 147)
+2025-12-02 23:06:23 [INFO] HA_TEST_LOGGER:   [LIGHT] PASS: test_light_set_on (1.255s)
+2025-12-02 23:06:23 [INFO] HA_TEST_LOGGER:   [LIGHT] START: test_light_set_off (Line 153)
+2025-12-02 23:06:24 [INFO] HA_TEST_LOGGER:   [LIGHT] PASS: test_light_set_off (1.171s)
+2025-12-02 23:06:24 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:24 [INFO] HA_TEST_LOGGER: [LOCK] Feature Test Started
+2025-12-02 23:06:24 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:24 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_get_state (Line 162)
+2025-12-02 23:06:25 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_get_state (0.033s)
+2025-12-02 23:06:25 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_set_locked (Line 168)
+2025-12-02 23:06:26 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_set_locked (1.065s)
+2025-12-02 23:06:26 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_set_unlocked (Line 174)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_set_unlocked (1.091s)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_attributes_exist (Line 180)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_attributes_exist (0.020s)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [LOCK] START: test_lock_handler_get_state (Line 196)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [LOCK] PASS: test_lock_handler_get_state (0.007s)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER: [CLIMATE] Feature Test Started
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [CLIMATE] START: test_climate_get_state (Line 242)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASS: test_climate_get_state (0.019s)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [CLIMATE] START: test_climate_attributes_exist (Line 252)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASS: test_climate_attributes_exist (0.031s)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [CLIMATE] START: test_climate_handler_get_state (Line 266)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASS: test_climate_handler_get_state (0.001s)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER: [FAN] Feature Test Started
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_get_state (Line 327)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_get_state (0.106s)
+2025-12-02 23:06:27 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_power_toggle (Line 332)
+2025-12-02 23:06:29 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_power_toggle (2.174s)
+2025-12-02 23:06:29 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_speed (Line 340)
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_speed (4.159s)
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_oscillate (Line 377)
+2025-12-02 23:06:33 [WARNING] HA_TEST_LOGGER:   [FAN] SKIPPED: test_fan_oscillate - ('/home/jenny/volttron/services/core/PlatformDriverAgent/tests/test_home_assistant.py', 387, 'Skipped: Fan entity fan.test_fan does not support oscillation: 500 Server Error: Internal Server Error for url: http://192.168.0.142:8123/api/services/fan/oscillate')
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER:   [FAN] START: test_fan_handler_get_state (Line 400)
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER:   [FAN] PASS: test_fan_handler_get_state (0.001s)
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER: 
+────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER: [SIREN] Feature Test Started
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER:   [SIREN] START: test_siren_get_state (Line 427)
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER:   [SIREN] PASS: test_siren_get_state (0.024s)
+2025-12-02 23:06:33 [INFO] HA_TEST_LOGGER:   [SIREN] START: test_siren_set_on (Line 433)
+2025-12-02 23:06:35 [INFO] HA_TEST_LOGGER:   [SIREN] PASS: test_siren_set_on (1.202s)
+2025-12-02 23:06:35 [INFO] HA_TEST_LOGGER:   [SIREN] START: test_siren_set_off (Line 439)
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [SIREN] PASS: test_siren_set_off (1.314s)
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [SIREN] START: test_siren_attributes_exist (Line 445)
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [SIREN] PASS: test_siren_attributes_exist (0.018s)
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [SIREN] START: test_siren_handler_get_state (Line 461)
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [SIREN] PASS: test_siren_handler_get_state (0.000s)
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: 
+════════════════════════════════════════════════════════════════════════════════
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: Pytest session finished
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: ════════════════════════════════════════════════════════════════════════════════
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: 
+Feature Test Summary
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [CLIMATE] PASSED: 3/3 tests passed
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [FAN] PASSED: 4/5 tests passed, 1 skipped
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [GENERAL] PASSED: 3/3 tests passed
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [LIGHT] PASSED: 3/3 tests passed
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [LOCK] PASSED: 5/5 tests passed
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   [SIREN] PASSED: 5/5 tests passed
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: ────────────────────────────────────────────────────────────────────────────────
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER:   Overall: 23 passed, 0 failed, 1 skipped (PASSED)
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: ════════════════════════════════════════════════════════════════════════════════
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: 
+Log file: /home/jenny/volttron/services/core/PlatformDriverAgent/tests_logs/pytest_2025-12-02.log
+2025-12-02 23:06:36 [INFO] HA_TEST_LOGGER: Exit status: 0
+

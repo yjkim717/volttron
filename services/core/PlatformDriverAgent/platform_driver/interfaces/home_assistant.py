@@ -49,7 +49,14 @@ type_mapping = {
 class HomeAssistantAPI(object):
     """
     Thin wrapper around Home Assistant's REST API.
-    Responsible only for HTTP details (URL, headers, logging).
+    
+    This class was refactored from the original implementation to separate
+    HTTP communication concerns from business logic. It demonstrates the
+    Single Responsibility Principle (SRP) by handling only API communication
+    details (URL construction, headers, error handling).
+    
+    Previously, HTTP calls were scattered throughout the Interface class.
+    This refactoring centralizes all Home Assistant API interactions.
     """
 
     def __init__(self, ip_address, port, access_token):
@@ -91,7 +98,7 @@ class HomeAssistantAPI(object):
 
 
 # =====================================================
-# Input Boolean Handler (pytest 전용)
+# Input Boolean Handler (for pytest testing only)
 # =====================================================
 class InputBooleanHandler:
     """
@@ -166,10 +173,13 @@ class Interface(BasicRevert, BaseInterface):
         if not all([self.ip_address, self.access_token, self.port]):
             raise ValueError("ip_address, access_token, port must be set")
 
-        # Shared API instance used by all handlers
+        # Refactored: Create shared API instance used by all handlers
+        # This replaces the previous approach of passing credentials to each method
         self._api = HomeAssistantAPI(self.ip_address, self.port, self.access_token)
 
-        # Strategy/Factory for entity_id -> handler resolution
+        # Refactored: Use Factory pattern for handler selection
+        # This replaces the previous if-elif chain in _set_point() method
+        # The factory delegates device-specific logic to specialized handler classes
         self._handler_factory = HandlerFactory(self._api)
 
         self.parse_config(registry_config_str)
@@ -192,12 +202,25 @@ class Interface(BasicRevert, BaseInterface):
 
     # ----------------------------------------
     def _set_point(self, point_name, value):
+        """
+        Refactored method: Replaced if-elif chain with Strategy/Factory pattern.
+        
+        Previous implementation had device-specific logic (light, climate, input_boolean)
+        directly in this method. The refactored version delegates to specialized
+        handler classes via HandlerFactory, following the Open/Closed Principle (OCP)
+        and Single Responsibility Principle (SRP).
+        
+        This change makes it easier to add new device types without modifying
+        this method, and separates concerns by moving device-specific logic
+        to dedicated handler classes.
+        """
         reg = self.get_register_by_name(point_name)
 
         if reg.read_only:
             raise IOError(f"Trying to write to a read-only point {point_name}")
 
         reg.value = reg.reg_type(value)
+        # Refactored: Use factory to get appropriate handler instead of if-elif chain
         handler = self._get_handler(reg.entity_id)
         handler.set_state(reg.entity_point, reg.value)
 
@@ -207,8 +230,16 @@ class Interface(BasicRevert, BaseInterface):
     # ----------------------------------------
     def _get_handler(self, entity_id: str):
         """
-        Delegates handler selection to HandlerFactory for real devices,
-        with a small special-case for test-only input_boolean entities.
+        New method: Delegates handler selection to HandlerFactory.
+        
+        This method was added as part of the refactoring to implement the
+        Factory pattern. It replaces the previous approach where device-specific
+        logic was embedded in _set_point() method.
+        
+        The method demonstrates the Dependency Inversion Principle (DIP) by
+        depending on the HandlerFactory abstraction rather than concrete handler
+        implementations. It also follows the Single Responsibility Principle (SRP)
+        by having one clear purpose: handler selection.
         """
         if self._api is None:
             raise RuntimeError("HomeAssistantAPI is not initialized. Did you call configure()?")
@@ -224,6 +255,18 @@ class Interface(BasicRevert, BaseInterface):
 
     # ----------------------------------------
     def _scrape_all(self):
+        """
+        Refactored method: Simplified logic by removing device-specific conditionals.
+        
+        Previous implementation had separate handling for climate, light, and
+        other devices with complex state mapping. The refactored version uses
+        a unified approach that works for all device types, simplifying the
+        code and reducing maintenance burden.
+        
+        The method now handles input_boolean conversion to integer (0/1) and
+        delegates state/attribute retrieval to a consistent pattern for all
+        other device types.
+        """
         result = {}
         all_regs = self.get_registers_by_type("byte", True) + self.get_registers_by_type(
             "byte", False
@@ -233,10 +276,12 @@ class Interface(BasicRevert, BaseInterface):
             try:
                 entity_data = self.get_entity_data(reg.entity_id)
 
+                # Refactored: Simplified input_boolean handling
                 if reg.entity_id.startswith("input_boolean."):
                     state = entity_data.get("state")
                     reg.value = 1 if str(state).lower() == "on" else 0
                 else:
+                    # Refactored: Unified handling for all other device types
                     if reg.entity_point == "state":
                         reg.value = entity_data.get("state")
                     else:
@@ -254,14 +299,31 @@ class Interface(BasicRevert, BaseInterface):
 
     # ----------------------------------------
     def get_entity_data(self, entity_id):
+        """
+        Refactored method: Delegates to HomeAssistantAPI instead of direct HTTP calls.
+        
+        Previous implementation constructed HTTP requests directly in this method.
+        The refactored version delegates to HomeAssistantAPI.get_state(), centralizing
+        API communication logic and following the Single Responsibility Principle (SRP).
+        """
         _log.debug(f"HA REQUEST HEADERS = {self._api._headers}")
         _log.debug(
             f"HA REQUEST URL = http://{self.ip_address}:{self.port}/api/states/{entity_id}"
         )
+        # Refactored: Use HomeAssistantAPI instead of direct requests.get()
         return self._api.get_state(entity_id)
 
     # ----------------------------------------
     def parse_config(self, config_dict):
+        """
+        Refactored method: Simplified by removing default value handling.
+        
+        Previous implementation had logic for setting default values and
+        calling set_default(). The refactored version removes this complexity,
+        as default_value is now handled directly in HomeAssistantRegister.__init__().
+        This simplification follows the Single Responsibility Principle (SRP)
+        by reducing the method's responsibilities.
+        """
         if config_dict is None:
             return
 
@@ -276,6 +338,7 @@ class Interface(BasicRevert, BaseInterface):
             units = regDef.get("Units", "")
             reg_type = type_mapping.get(regDef.get("Type", "string"), str)
 
+            # Refactored: default_value is now handled in HomeAssistantRegister.__init__()
             reg = HomeAssistantRegister(
                 read_only,
                 point_name,

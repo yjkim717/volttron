@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
+from .base_handler import BaseDeviceHandler
 
 _log = logging.getLogger(__name__)
 
-class LockHandler:
+class LockHandler(BaseDeviceHandler):
     """
     Minimal handler for controlling Home Assistant lock entities.
 
@@ -16,30 +17,17 @@ class LockHandler:
 
     Example:
         lock = LockHandler(api, "lock.front_door")
-        lock.set_state(1)  # Lock
-        lock.set_state(0)  # Unlock
+        lock.set_state("state", 1)  # Lock
+        lock.set_state("state", 0)  # Unlock
     """
 
-    def __init__(self, api, entity_id):
-        """
-        Initialize a LockHandler instance.
-
-        Args:
-            api: An object that provides a `call_service(domain, service, payload)`
-                 method compatible with Home Assistant's service API.
-            entity_id (str): The Home Assistant lock entity ID
-                 (e.g., "lock.front_door").
-
-        """
-        self.api = api
-        self.entity_id = entity_id
-
     # Unified setter
-    def set_state(self, value):
+    def set_state(self, entity_point, value):
         """
         Set the lock state.
 
         Args:
+            entity_point: Typically "state" (for consistency with other handlers)
             value (int):
                 - 1 → lock the entity
                 - 0 → unlock the entity
@@ -53,8 +41,8 @@ class LockHandler:
             - Logs the action for debugging.
 
         Example:
-            set_state(1) → calls HA "lock.lock"
-            set_state(0) → calls HA "lock.unlock"
+            set_state("state", 1) → calls HA "lock.lock"
+            set_state("state", 0) → calls HA "lock.unlock"
         """
         if value not in (0, 1):
             raise ValueError("Lock state must be 0 (unlocked) or 1 (locked).")
@@ -66,4 +54,24 @@ class LockHandler:
             self.entity_id, service, value
         )
 
-        self.api.call_service("lock", service, self.entity_id)
+        # Use parent class's call_service method
+        self.call_service("lock", service)
+
+    def get_state(self, entity_point):
+        """
+        Returns state of entity, or of a specific entity_point
+        
+        Args:
+            entity_point: "state" or attribute name (e.g., "friendly_name")
+        """
+        state_data = self.api.get_state(self.entity_id)
+
+        if not state_data:
+            return None
+
+        # Lock's "state" = "locked"/"unlocked"
+        if entity_point == "state":
+            return state_data.get("state")
+
+        # Attributes
+        return state_data.get("attributes", {}).get(entity_point)

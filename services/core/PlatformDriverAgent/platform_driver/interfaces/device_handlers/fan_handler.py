@@ -33,9 +33,7 @@ class FanHandler(BaseDeviceHandler):
             api: HA API
             entity_id: entity ID of fan to be controlled
         """
-        @override
-        self.api = api
-        self.entity_id = entity_id
+        super().__init__(api, entity_id)
         # Registry pattern: Map entity_point to handler method
         self._state_handlers: Dict[str, Callable[[int], Tuple[str, dict]]] = {
             "oscillate": self._handle_oscillate,
@@ -44,7 +42,6 @@ class FanHandler(BaseDeviceHandler):
         }
 
     def set_state(self, entity_point: str, value: int) -> None:
-        @override
         """
         Unified setter using Strategy pattern.
         
