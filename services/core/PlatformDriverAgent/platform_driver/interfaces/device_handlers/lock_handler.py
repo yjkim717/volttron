@@ -5,20 +5,56 @@ _log = logging.getLogger(__name__)
 
 class LockHandler:
     """
-    Minimal Lock Handler:
-    - Supports locked/unlocked via Home Assistant lock.lock / lock.unlock
-    - Supports reading both state & attributes for testing
+    Minimal handler for controlling Home Assistant lock entities.
+
+    This class provides a simple interface for locking and unlocking
+    a Home Assistant lock by calling the appropriate HA services.
+
+    Supported operations:
+      - lock → lock.lock
+      - unlock → lock.unlock
+
+    Example:
+        lock = LockHandler(api, "lock.front_door")
+        lock.set_state(1)  # Lock
+        lock.set_state(0)  # Unlock
     """
 
     def __init__(self, api, entity_id):
+        """
+        Initialize a LockHandler instance.
+
+        Args:
+            api: An object that provides a `call_service(domain, service, payload)`
+                 method compatible with Home Assistant's service API.
+            entity_id (str): The Home Assistant lock entity ID
+                 (e.g., "lock.front_door").
+
+        """
         self.api = api
         self.entity_id = entity_id
 
     # Unified setter
     def set_state(self, value):
         """
-        value = 1 → locked
-        value = 0 → unlocked
+        Set the lock state.
+
+        Args:
+            value (int):
+                - 1 → lock the entity
+                - 0 → unlock the entity
+
+        Raises:
+            ValueError: If `value` is not 0 or 1.
+
+        Behavior:
+            - Calls Home Assistant `lock.lock` or `lock.unlock`
+              depending on the value.
+            - Logs the action for debugging.
+
+        Example:
+            set_state(1) → calls HA "lock.lock"
+            set_state(0) → calls HA "lock.unlock"
         """
         if value not in (0, 1):
             raise ValueError("Lock state must be 0 (unlocked) or 1 (locked).")
@@ -31,26 +67,3 @@ class LockHandler:
         )
 
         self.api.call_service("lock", service, self.entity_id)
-    
-    # Minimal get_state for testing
-    def get_state(self, entity_point):
-        """
-        entity_point="state" → returns "locked" / "unlocked"
-        entity_point="<attribute>" → returns HA attribute value
-        """
-        state_data = self.api.get_state(self.entity_id)
-
-        if entity_point == "state":
-            return state_data.get("state")  # "locked" or "unlocked"
-
-        # Attributes
-        return state_data.get("attributes", {}).get(entity_point)
-
-
-"""
-Example usage 
-
-lock_handler = LockHandler(api, "lock.front_door")
-lock_handler.set_state(1)  # Locks the door
-lock_handler.set_state(0)  # Unlocks the door
-"""
